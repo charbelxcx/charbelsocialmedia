@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Social Hub</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      transition: background 0.4s, color 0.4s;
+      overflow-x: hidden;
+    }
+
+    .container {
+      padding: 40px 20px;
+      max-width: 1000px;
+      margin: auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: #222;
+      padding: 20px;
+      border-radius: 15px;
+      text-decoration: none;
+      color: white;
+      font-size: 1.1rem;
+      transition: transform 0.2s, background 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      border: 2px solid #333;
+      z-index: 2;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      background: #444;
+    }
+
+    .discord { border-color: #5865F2; }
+    .instagram { border-color: #E1306C; }
+    .github { border-color: #333; }
+    .epic { border-color: #a1a1a1; }
+    .steam { border-color: #171a21; }
+    .riot { border-color: #d13639; }
+    .spotify {
+      border-color: #1DB954;
+      background-color: #1DB954;
+      color: black;
+      font-weight: bold;
+    }
+    .spotify:hover {
+      background-color: #1ed760;
+      color: black;
+    }
+    .youtube { border-color: #FF0000; }
+    .twitch { border-color: #9146FF; }
+
+    body.dark {
+      background: #0b0c10;
+      color: white;
+    }
+
+    body.light {
+      background: #f0f0f0;
+      color: #111;
+    }
+
+    body.light .card {
+      background-color: white;
+      color: #111;
+      border-color: #ccc;
+    }
+
+    body.light .card:hover {
+      background-color: #e8e8e8;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+    }
+
+    #toggleTheme {
+      background: #fff;
+      border: none;
+      border-radius: 50%;
+      padding: 10px 14px;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .stars, .stars2, .stars3 {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      background-repeat: repeat;
+      background-size: cover;
+      pointer-events: none;
+    }
+
+    .stars {
+      background-image: url("https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/img/stars.png");
+      animation: moveStars 200s linear infinite;
+    }
+
+    .stars2 {
+      background-image: url("https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/img/stars2.png");
+      animation: moveStars 400s linear infinite;
+    }
+
+    .stars3 {
+      background-image: url("https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/img/stars3.png");
+      animation: moveStars 600s linear infinite;
+    }
+
+    @keyframes moveStars {
+      from { background-position: 0 0; }
+      to { background-position: -10000px 5000px; }
+    }
+
+    .credits {
+      position: fixed;
+      bottom: 10px;
+      right: 15px;
+      font-size: 0.8rem;
+      color: #bbb;
+      z-index: 1000;
+      font-style: italic;
+    }
+
+    /* Spotify embed styling */
+    .spotify-embed-container {
+      margin: 40px auto;
+      max-width: 100%;
+      width: 320px;
+      border-radius: 16px;
+      overflow: hidden;
+      background-color: #191414;
+      border: 2px solid #1DB954;
+      box-shadow: 0 12px 25px rgba(29, 185, 84, 0.2);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .spotify-embed-container:hover {
+      transform: scale(1.02);
+      box-shadow: 0 15px 40px rgba(29, 185, 84, 0.4);
+    }
+
+    .spotify-embed-container iframe {
+      border: none;
+      border-radius: 0;
+      width: 100%;
+      height: 380px;
+      display: block;
+    }
+
+    /* Spotify profile card */
+    .spotify-profile {
+      background-color: #191414;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+      margin-top: 30px;
+      border-radius: 16px;
+      border: 1px solid #1DB954;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .spotify-profile img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+    }
+
+    .spotify-profile h2 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .spotify-profile a {
+      color: #1DB954;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 5px;
+      display: inline-block;
+    }
+
+    .spotify-profile a:hover {
+      color: #1ed760;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .card {
+        padding: 15px;
+        font-size: 1rem;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      #toggleTheme {
+        padding: 8px 12px;
+        font-size: 1rem;
+      }
+
+      .card-grid {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 15px;
+      }
+
+      .container {
+        padding: 30px 10px;
+      }
+
+      .spotify-profile {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .card {
+        font-size: 0.9rem;
+      }
+
+      .card i {
+        font-size: 1.2rem;
+      }
+
+      .grandrp { border-color: #2a6ebb; }
+    }
+
+    .xbtn {
+      border-color: #1DA1F2;
+      color: #1DA1F2;
+    }
+    .xbtn:hover {
+      background-color: #1DA1F2;
+      color: white;
+    }
+
+    .kickbtn {
+      border-color: #ff4600;
+      color: #ff4600;
+    }
+    .kickbtn:hover {
+      background-color: #ff4600;
+      color: white;
+    }
+
+  </style>
+</head>
+<body class="dark">
+  <div class="stars"></div>
+  <div class="stars2"></div>
+  <div class="stars3"></div>
+
+  <div class="theme-toggle">
+    <button id="toggleTheme">🌙</button>
+  </div>
+
+  <div class="container">
+    <h1>🌐 Charbel</h1>
+    <div class="card-grid">
+      <a class="card discord" href="https://discord.gg/3bczfARfZd" target="_blank"><i class="fab fa-discord"></i> Discord</a>
+      <a class="card instagram" href="https://www.instagram.com/sharbelchy?igsh=Y3hob3Q2eWRqMnNi" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+      <a class="card github" href="https://github.com/charbelxcx" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+      <a class="card epic" href="https://launcher.store.epicgames.com/u/7e48c4b532a94ab48e196f7e449c2a88" target="_blank"><i class="fas fa-gamepad"></i> Epic Games</a>
+      <a class="card steam" href="https://steamcommunity.com/profiles/76561199745600987" target="_blank"><i class="fab fa-steam"></i> Steam</a>
+      <a class="card riot" href="#" target="_blank"><i class="fas fa-fire"></i> Riot Games</a>
+      <a class="card spotify" href="https://open.spotify.com/user/31t3qlstgfdvdo6bwp3cfckir5yi?si=819623d2c5a9453d" target="_blank"><i class="fab fa-spotify"></i> Spotify</a>
+      <a class="card youtube" href="https://www.youtube.com/channel/UCA4aTDZo21dBs2gR6c6UgPQ" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+      <a class="card twitch" href="https://www.twitch.tv/charbelxcx" target="_blank"><i class="fab fa-twitch"></i> Twitch</a>
+      <a class="card grandrp" href="https://gta5grand.com/forum/members/216672/" target="_blank"><i class="fas fa-gamepad"></i> Grand RP</a>
+      <a class="card xbtn" href="https://x.com/charbelxcx?t=gJjxJa72PFeZUbCU8qdY9A&s=09" target="_blank"><i class="fab fa-twitter"></i> X</a>
+      <a class="card kickbtn" href="https://kick.com/charbelxcx" target="_blank"><i class="fas fa-video"></i> Kick</a>
+    </div>
+
+    <!-- Spotify Playlist Embed -->
+    <div class="spotify-embed-container">
+      <iframe src="https://open.spotify.com/embed/playlist/0B1cW8x7Mopg6Du5BJ4spM" allowtransparency="true" allow="encrypted-media" allowfullscreen></iframe>
+    </div>
+
+    <!-- Spotify Profile Card -->
+    <div class="spotify-profile">
+      <img src="https://i.scdn.co/image/ab6761610000e5eb6f7f42f3c72b93e1bd28d3ec" alt="Spotify Avatar" />
+      <div>
+        <h2>Charbel on Spotify</h2>
+        <p>Follow my playlists 🎧</p>
+        <a href="https://open.spotify.com/user/31t3qlstgfdvdo6bwp3cfckir5yi?si=819623d2c5a9453d" target="_blank">Visit Profile</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="credits">Created by <strong>Charbel Chaaya</strong></div>
+
+  <script>
+    const toggleBtn = document.getElementById("toggleTheme");
+    const body = document.body;
+
+    toggleBtn.addEventListener("click", () => {
+      if (body.classList.contains("dark")) {
+        body.classList.replace("dark", "light");
+        toggleBtn.textContent = "☀️";
+      } else {
+        body.classList.replace("light", "dark");
+        toggleBtn.textContent = "🌙";
+      }
+    });
+  </script>
+</body>
+</html>
